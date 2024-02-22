@@ -3,31 +3,47 @@ import com.example.Lion;
 
 import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(MockitoJUnitRunner.class)
 public class LionTest {
-    Feline feline = new Feline();
-    Lion lion = new Lion(feline);
+
+    @Mock
+    Feline feline;
 
     @Test
-    public void testGetKittens() {
-        System.out.println(lion.getKittens());
+    public void testGetKittens() throws Exception{
+        Lion lion = new Lion("Самка", feline);
+        Mockito.when(feline.getKittens()).thenReturn(1);
+        Assert.assertEquals(1, lion.getKittens());
     }
 
     @Test
-    public void testDoesHaveMan() {
-        System.out.println(lion.doesHaveMane());
+    public void testDoesHaveMan() throws Exception {
+        Lion lion = new Lion("Самец", feline);
+        assertTrue(lion.doesHaveMane());
     }
 
     @Test
     public void testGetFood() throws Exception {
-        System.out.println(lion.getFood());
+        Lion lion = new Lion("Самец", feline);
+        Mockito.when(feline.getFood("Хищник")).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        List<String> expected = List.of("Животные", "Птицы", "Рыба");
+        Assert.assertEquals(expected, lion.getFood());
     }
 
     @Test()
     public void constructorThrowsExceptionOnUnsupportedSex() {
         Exception exception = Assert.assertThrows(Exception.class, () -> {
-            Lion lion = new Lion("Котенок");
+            Lion lion = new Lion("Котенок", feline);
             lion.doesHaveMane();
         });
         assertEquals("Используйте допустимые значения пола животного - самец или самка", exception.getMessage());

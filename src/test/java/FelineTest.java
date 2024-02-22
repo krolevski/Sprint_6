@@ -22,12 +22,12 @@ public class FelineTest {
 
     @Test
     public void testGetFamily() {
-        System.out.println(feline.getFamily());
+        Assert.assertEquals("Кошачьи", feline.getFamily());
     }
 
     @Test
     public void testGetKittensNoParam() {
-        System.out.println(feline.getKittens());
+        Assert.assertEquals(1, feline.getKittens());
     }
 
     @Test
